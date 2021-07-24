@@ -3,23 +3,25 @@ using System.Collections.Generic;
 using Microsoft.Win32;
 using System.IO;
 using System.Text;
-using System;
 using System.Linq;
+using System;
+using TaskThree.Export;
 
 namespace TaskThree.ViewModels
 {
     class MainWindowViewModel
     {
         private TaskThreeContext _db;
-        private RelayCommand _loadDataCommand;
+        private RelayCommand _loadDataCommand, _exportToXMLCommand, _exportToExcelCommand;
 
         public List<Record> Records { get; set; }
+        public Record FilterRecord { get; set; }
         
         public MainWindowViewModel()
         {
             _db = new TaskThreeContext();
             Records = _db.Records.ToList();
-            //Records.Add(new Record { Date = System.DateTime.Now, City = "a", Country = "a", FirstName = "a", LastName = "a", SurName = "a" });
+            FilterRecord = new Record();
         }
 
         public RelayCommand LoadDataCommand
@@ -59,6 +61,35 @@ namespace TaskThree.ViewModels
 
                     }));
             }
+        }
+
+        public RelayCommand ExportToXMLCommand
+        {
+            get
+            {
+                return _exportToXMLCommand ??
+                    (_exportToXMLCommand = new RelayCommand(obj => 
+                    {
+                        ExportToFormat(new XMLExporter());
+                    }));
+            }
+        }
+
+        public RelayCommand ExportToExcelCommand
+        {
+            get
+            {
+                return _exportToExcelCommand ??
+                    (_exportToExcelCommand = new RelayCommand(obj =>
+                    {
+                        ExportToFormat(new ExcelExporter());
+                    }));
+            }
+        }
+
+        private void ExportToFormat(IExporter exp)
+        {
+            exp.Export(FilterRecord);
         }
     }
 }
