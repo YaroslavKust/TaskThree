@@ -89,7 +89,7 @@ namespace TaskThree.ViewModels
 
         private void ExportToFormat(IExporter exp)
         {
-            exp.Export(FilterRecord);
+            exp.Export(Records);
         }
     }
 }

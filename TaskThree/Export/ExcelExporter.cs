@@ -1,9 +1,10 @@
-﻿using TaskThree.Models;
+﻿using System.Collections.Generic;
+using TaskThree.Models;
 
 namespace TaskThree.Export
 {
     class ExcelExporter: IExporter
     {
-        public void Export(Record record) { }
+        public void Export(ICollection<Record> records) { }
     }
 }
