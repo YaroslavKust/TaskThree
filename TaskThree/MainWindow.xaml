@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskThree"
         mc:Ignorable="d"
-        Title="MainWindow" Height="553" Width="800">
+        Title="MainWindow" Height="553" Width="368">
     <Window.Resources>
         <Style x:Key="input">
             <Setter Property="Control.Margin" Value="20"/>
@@ -19,8 +19,7 @@
         <Menu>
             <MenuItem Header="Загрузить csv" Grid.Row="0" Command="{Binding LoadDataCommand}"/>
         </Menu>
-        <StackPanel Orientation="Horizontal" Grid.Row="1" Margin="0,28,0,2">
-            <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Vertical" Grid.Row="1">
                 <GroupBox Header="Фильтр">
                     <Grid>
                         <Grid.ColumnDefinitions>
@@ -63,21 +62,10 @@
                 </GroupBox>
                 <GroupBox Header="Экспорт">
                     <StackPanel Orientation="Horizontal">
-                        <Button Content="XML" Command="{Binding ExportToXMLCommand}"/>
-                        <Button Content="Excel"/>
+                        <Button Content="XML" Command="{Binding ExportToXMLCommand}" Style="{StaticResource input}" Height="28" Width="101"/>
+                        <Button Content="Excel" Command="{Binding ExportToExcelCommand}" Style="{StaticResource input}" Height="26" Width="122"/>
                     </StackPanel>
                 </GroupBox>
             </StackPanel>
-            <DataGrid Width="400" MaxWidth="1000" ItemsSource="{Binding Path=Records}" AutoGenerateColumns="False">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Дата" Binding="{Binding Path = Date}"/>
-                    <DataGridTextColumn Header="Фамилия" Binding="{Binding Path= LastName}"/>
-                    <DataGridTextColumn Header="Имя" Binding="{Binding Path=FirstName}"/>
-                    <DataGridTextColumn Header="Отчество" Binding="{Binding Path=SurName}"/>
-                    <DataGridTextColumn Header="Город" Binding="{Binding Path=City}"/>
-                    <DataGridTextColumn Header="Страна" Binding="{Binding Path=Country}"/>
-                </DataGrid.Columns>
-            </DataGrid>
-        </StackPanel>
     </Grid>
 </Window>

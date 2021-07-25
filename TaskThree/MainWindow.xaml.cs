@@ -1,5 +1,6 @@
 ﻿using System.Windows;
 using TaskThree.ViewModels;
+using TaskThree.Services;
 
 namespace TaskThree
 {
@@ -11,7 +12,7 @@ namespace TaskThree
         public MainWindow()
         {
             InitializeComponent();
-            MainWindowViewModel vm = new MainWindowViewModel();
+            MainWindowViewModel vm = new MainWindowViewModel(new CSVFileService(), new DefaultDialogService());
             DataContext = vm;
         }
     }
