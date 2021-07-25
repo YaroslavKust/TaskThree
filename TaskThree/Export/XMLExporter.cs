@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Xml.Linq;
 using TaskThree.Models;
 
@@ -6,7 +7,7 @@ namespace TaskThree.Export
 {
     class XMLExporter: IExporter
     {
-        public void Export(ICollection<Record> records) 
+        public void Export(List<Record> records, string fileName) 
         {
             XDocument doc = new XDocument();
             XElement app = new XElement("Application");
@@ -28,7 +29,7 @@ namespace TaskThree.Export
             }
 
             doc.Add(app);
-            doc.Save("records.xml");
+            doc.Save(fileName ?? "records.xml");
         }
     }
 }

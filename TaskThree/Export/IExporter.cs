@@ -5,6 +5,6 @@ namespace TaskThree.Export
 {
     interface IExporter
     {
-        void Export(ICollection<Record> records);
+        void Export(List<Record> records, string fileName);
     }
 }
