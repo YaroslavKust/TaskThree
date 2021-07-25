@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using TaskThree.Models;
 
 namespace TaskThree.Services
 {
     interface IFileService
     {
+        List<Record> ReadAll(string fileName);
     }
 }
