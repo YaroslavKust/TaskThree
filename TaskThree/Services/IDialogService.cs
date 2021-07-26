@@ -5,5 +5,6 @@ namespace TaskThree.Services
     {
         string OpenDialog();
         string SaveDialog();
+        string FileName { get; set; }
     }
 }

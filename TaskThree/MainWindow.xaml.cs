@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using TaskThree.ViewModels;
 using TaskThree.Services;
+using TaskThree.Repositories;
 
 namespace TaskThree
 {
@@ -12,7 +13,7 @@ namespace TaskThree
         public MainWindow()
         {
             InitializeComponent();
-            MainWindowViewModel vm = new MainWindowViewModel(new CSVFileService(), new DefaultDialogService());
+            MainWindowViewModel vm = new MainWindowViewModel(new CSVFileService(), new DefaultDialogService(), new SQLServerRepository());
             DataContext = vm;
         }
     }

@@ -18,7 +18,7 @@ namespace TaskThree.Export
 
             string[] fields = { "id", "Date", "FirstName", "LastName", "SurName", "City", "Country" };
 
-            for (int i = 0; i < fields.Length; i++)
+            for (int i = 0; i < records.GetType().GetFields().Length; i++)
                 ((Excel.Range)sheet.Cells[1, i + 1]).Value2 = fields[i];
 
             for(int i = 0; i < records.Count; i++)

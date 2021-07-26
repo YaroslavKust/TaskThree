@@ -1,17 +1,16 @@
 ﻿using TaskThree.Models;
 using System.Collections.Generic;
 using System.Linq;
-using System;
 using TaskThree.Export;
 using System.Threading.Tasks;
 using TaskThree.Services;
-using Microsoft.EntityFrameworkCore;
+using TaskThree.Repositories;
 
 namespace TaskThree.ViewModels
 {
     class MainWindowViewModel
     {
-        private TaskThreeContext _db;
+        private IRepository _db;
         private RelayCommand _loadDataCommand, _exportToXMLCommand, _exportToExcelCommand;
         private IFileService _file;
         private IDialogService _dialog;
@@ -19,29 +18,12 @@ namespace TaskThree.ViewModels
         public List<Record> Records { get; set; }
         public Record FilterRecord { get; set; }
         
-        public MainWindowViewModel(IFileService file, IDialogService dialog)
+        public MainWindowViewModel(IFileService file, IDialogService dialog, IRepository db)
         {
             _file = file;
             _dialog = dialog;
-            _db = new TaskThreeContext();
+            _db = db;
             FilterRecord = new Record();
-        }
-
-        public async Task FilterDataAsync()
-        {
-            Records = await _db.Records.Where(r =>
-                FilterRecord.Date == DateTime.MinValue || r.Date == FilterRecord.Date
-                    &&
-                    String.IsNullOrWhiteSpace(FilterRecord.FirstName) || r.FirstName == FilterRecord.FirstName
-                    &&
-                    String.IsNullOrWhiteSpace(FilterRecord.LastName) || r.LastName == FilterRecord.LastName
-                    &&
-                    String.IsNullOrWhiteSpace(FilterRecord.SurName) || r.SurName == FilterRecord.SurName
-                    &&
-                    String.IsNullOrWhiteSpace(FilterRecord.City) || r.City == FilterRecord.City
-                    &&
-                    String.IsNullOrWhiteSpace(FilterRecord.Country) || r.Country == FilterRecord.Country
-            ).ToListAsync();
         }
 
         public RelayCommand LoadDataCommand
@@ -56,7 +38,7 @@ namespace TaskThree.ViewModels
                         if (fname != null)
                         {
                             var results = _file.ReadAll(fname);
-                            _db.AddRangeAsync(results);
+                            _db.AddRecordsAsync(results);
                         }
                     }));
             }
@@ -69,6 +51,7 @@ namespace TaskThree.ViewModels
                 return _exportToXMLCommand ??
                     (_exportToXMLCommand = new RelayCommand(obj => 
                     {
+                        _dialog.FileName = "records.xml";
                         ExportToFormatAsync(new XMLExporter());
                     }));
             }
@@ -81,6 +64,7 @@ namespace TaskThree.ViewModels
                 return _exportToExcelCommand ??
                     (_exportToExcelCommand = new RelayCommand(obj =>
                     {
+                        _dialog.FileName = "records.xlsx";
                         ExportToFormatAsync(new ExcelExporter());
                     }));
             }
@@ -88,9 +72,9 @@ namespace TaskThree.ViewModels
 
         private async void ExportToFormatAsync(IExporter exp)
         {
-            await FilterDataAsync();
             await Task.Run(() =>
             {
+                Records = _db.GetRecordsWithFilter(FilterRecord).ToList();
                 exp.Export(Records, _dialog.SaveDialog());
             });
         }
