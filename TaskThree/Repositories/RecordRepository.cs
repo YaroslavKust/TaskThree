@@ -17,7 +17,7 @@ namespace TaskThree.Repositories
         public IEnumerable<Record> GetRecordsWithFilter(Record rec)
         {
             IEnumerable<Record> Records = _db.Records.Where(r =>
-                (r.Date.DayOfYear== rec.Date.DayOfYear)
+                (r.Date.DayOfYear == rec.Date.DayOfYear) && (r.Date.Year == rec.Date.Year)
                 &&
                 (String.IsNullOrWhiteSpace(rec.FirstName) || r.FirstName == rec.FirstName)
                 &&
