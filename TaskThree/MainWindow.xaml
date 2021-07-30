@@ -5,67 +5,55 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TaskThree"
         mc:Ignorable="d"
-        Title="MainWindow" Height="553" Width="368">
+        Title="MainWindow" MinHeight="450" MinWidth="300" MaxHeight="550" MaxWidth="500">
     <Window.Resources>
-        <Style x:Key="input">
-            <Setter Property="Control.Margin" Value="20"/>
+        <Style TargetType="Button">
+            <Setter Property="Control.Margin" Value="5"/>
+            <Setter Property="MinWidth" Value="100"/>
+            <Setter Property="MaxWidth" Value="300"/>
+        </Style>
+        <Style TargetType="DatePicker">
+            <Setter Property="Width" Value="200"/>
+        </Style>
+        <Style TargetType="TextBox">
+            <Style.Triggers>
+                <Trigger Property="Validation.HasError" Value="true">
+                    <Setter Property="ToolTip" Value="{Binding RelativeSource={x:Static RelativeSource.Self},
+                        Path=(Validation.Errors)[0].ErrorContent}" />
+                </Trigger>
+            </Style.Triggers>
         </Style>
     </Window.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="23*"/>
-            <RowDefinition Height="411*"/>
+            <RowDefinition Height="5*"/>
+            <RowDefinition Height="80*"/>
+            <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
-        <Menu>
+        <Menu Grid.Row="0">
             <MenuItem Header="Загрузить csv" Grid.Row="0" Command="{Binding LoadDataCommand}"/>
         </Menu>
-        <StackPanel Orientation="Vertical" Grid.Row="1">
-                <GroupBox Header="Фильтр">
-                    <Grid>
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="200"/>
-                        </Grid.ColumnDefinitions>
-
-                        <Grid.RowDefinitions>
-                            <RowDefinition/>
-                            <RowDefinition/>
-                            <RowDefinition />
-                            <RowDefinition />
-                            <RowDefinition/>
-                            <RowDefinition />
-                        </Grid.RowDefinitions>
-
-                        <Label Content="Дата" Grid.Row="0" Grid.Column="0" Style="{StaticResource input}"/>
-                        <DatePicker Grid.Row="0" Grid.Column="1" Style="{StaticResource input}" Text="{Binding FilterRecord.Date}"/>
-
-                        <Label Content="Фамилия" Grid.Row="1" Grid.Column="0" Style="{StaticResource input}" />
-                        <TextBox 
-                    Grid.Row="1" 
-                    Grid.Column="1" 
-                    Style="{StaticResource input}"
-                    Text="{Binding FilterRecord.FirstName}"
-                    />
-
-                        <Label Content="Имя" Grid.Row="2" Grid.Column="0" Style="{StaticResource input}"/>
-                        <TextBox Grid.Row="2" Grid.Column="1" Style="{StaticResource input}" Text="{Binding FilterRecord.FirstName}"/>
-
-                        <Label Content="Отчество" Grid.Row="3" Grid.Column="0" Style="{StaticResource input}"/>
-                        <TextBox Grid.Row="3" Grid.Column="1" Style="{StaticResource input}" Text="{Binding FilterRecord.SurName}"/>
-
-                        <Label Content="Город" Grid.Row="4" Grid.Column="0" Style="{StaticResource input}"/>
-                        <TextBox Grid.Row="4" Grid.Column="1" Style="{StaticResource input}" Text="{Binding FilterRecord.City}"/>
-
-                        <Label Content="Страна" Grid.Row="5" Grid.Column="0" Style="{StaticResource input}"/>
-                        <TextBox Grid.Row="5" Grid.Column="1" Style="{StaticResource input}" Text="{Binding FilterRecord.Country}"/>
-                    </Grid>
-                </GroupBox>
-                <GroupBox Header="Экспорт">
-                    <StackPanel Orientation="Horizontal">
-                        <Button Content="XML" Command="{Binding ExportToXMLCommand}" Style="{StaticResource input}" Height="28" Width="101"/>
-                        <Button Content="Excel" Command="{Binding ExportToExcelCommand}" Style="{StaticResource input}" Height="26" Width="122"/>
-                    </StackPanel>
-                </GroupBox>
+        <GroupBox Header="Фильтр" Grid.Row="1">
+            <StackPanel Orientation="Vertical">
+                <Label Content="Дата"/>
+                <DatePicker SelectedDate="{Binding FilterRecord.Date}" HorizontalAlignment="Left"/>
+                <Label Content="Фамилия"/>
+                <TextBox Text="{Binding FilterRecord.LastName, ValidatesOnDataErrors=True}"/>
+                <Label Content="Имя"/>
+                <TextBox Text="{Binding FilterRecord.FirstName, ValidatesOnDataErrors=True}"/>
+                <Label Content="Отчество"/>
+                <TextBox Text="{Binding FilterRecord.SurName, ValidatesOnDataErrors=True}"/>
+                <Label Content="Город"/>
+                <TextBox Text="{Binding FilterRecord.City, ValidatesOnDataErrors=True}"/>
+                <Label Content="Страна"/>
+                <TextBox Text="{Binding FilterRecord.Country, ValidatesOnDataErrors=True}"/>
             </StackPanel>
+        </GroupBox>
+        <GroupBox Header="Экспорт" Grid.Row="2">
+            <StackPanel Orientation="Horizontal">
+                <Button Content="XML" Command="{Binding ExportToXMLCommand}"/>
+                <Button Content="Excel" Command="{Binding ExportToExcelCommand}"/>
+            </StackPanel>
+        </GroupBox>
     </Grid>
 </Window>
