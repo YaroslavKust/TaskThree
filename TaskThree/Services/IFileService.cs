@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using TaskThree.Models;
 
 namespace TaskThree.Services
 {
     interface IFileService
     {
-        List<Record> ReadAll(string fileName);
+        Task<List<Record>> ReadAllAsync(string fileName);
     }
 }

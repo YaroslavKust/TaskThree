@@ -2,19 +2,20 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Threading.Tasks;
 using TaskThree.Models;
 
 namespace TaskThree.Services
 {
     class CSVFileService: IFileService
     {
-        public List<Record> ReadAll(string fileName)
+        public async Task<List<Record>> ReadAllAsync(string fileName)
         {
             List<Record> records = new List<Record>();
             StreamReader reader = new StreamReader(fileName, Encoding.UTF8);
 
             string line;
-            while ((line = reader.ReadLine()) != null)
+            while ((line = await reader.ReadLineAsync()) != null)
             {
                 string[] data = line.Split(';');
                 Record rec = new Record()

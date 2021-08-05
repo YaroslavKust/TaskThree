@@ -28,7 +28,7 @@ namespace TaskThree.Models
         {
             get
             {
-                string cityOrCountry = "^[a - zA - Zа - яА - яЁё \\-]+$";
+                string cityOrCountry = "^[a - zA - Zа - яА - ЯЁё \\-]+$";
                 string fullName = "^[A-Za-zА-Яа-яЁё]+\\-?[A-Za-zА-Яа-яЁё]+$";
 
                 _error = string.Empty;

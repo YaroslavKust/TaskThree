@@ -14,7 +14,7 @@ namespace TaskThree
         protected override void OnStartup(StartupEventArgs e)
         {
             var builder = new ContainerBuilder();
-            builder.RegisterType<DefaultDialogService>().As<IDialogService>();
+            builder.RegisterType<DefaultDialogService>().As<IFileSelectionDialog>();
             builder.RegisterType<CSVFileService>().As<IFileService>();
             builder.RegisterType<RecordRepository>().As<IRepository>();
             builder.RegisterType<MainWindowViewModel>().AsSelf();

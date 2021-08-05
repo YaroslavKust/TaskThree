@@ -36,7 +36,7 @@ namespace TaskThree.Repositories
         public async void AddRecordsAsync(IEnumerable<Record> records)
         {
             await _db.AddRangeAsync(records);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
         }
     }
 }

@@ -5,20 +5,24 @@ using System.Threading.Tasks;
 using TaskThree.Services;
 using TaskThree.Repositories;
 using System.Windows;
+using System.Collections.Generic;
 
 namespace TaskThree.ViewModels
 {
     class MainWindowViewModel
     {
+        private const string _defaultExcelName = "records.xlsx";
+        private const string _defaultXMLName = "records.xml";
+
         private IRepository _db;
         private IFileService _file;
-        private IDialogService _dialog;
+        private IFileSelectionDialog _dialog;
 
         private RelayCommand _loadDataCommand, _exportToXMLCommand, _exportToExcelCommand;
 
         public Record FilterRecord { get; set; } = new Record() { Date = System.DateTime.Today };
         
-        public MainWindowViewModel(IFileService file, IDialogService dialog, IRepository db)
+        public MainWindowViewModel(IFileService file, IFileSelectionDialog dialog, IRepository db)
         {
             _file = file;
             _dialog = dialog;
@@ -30,13 +34,13 @@ namespace TaskThree.ViewModels
             get
             {
                 return _loadDataCommand ??
-                    (_loadDataCommand = new RelayCommand(obj =>
+                    (_loadDataCommand = new RelayCommand(async obj =>
                     {
                         string fname = _dialog.OpenDialog();
 
                         if (fname != null)
                         {
-                            var results = _file.ReadAll(fname);
+                            var results = await _file.ReadAllAsync(fname);
                             _db.AddRecordsAsync(results);
                         }
                     }));
@@ -50,7 +54,7 @@ namespace TaskThree.ViewModels
                 return _exportToXMLCommand ??
                     (_exportToXMLCommand = new RelayCommand(obj => 
                     {
-                        _dialog.FileName = "records.xml";
+                        _dialog.FileName = _defaultXMLName;
                         ExportToFormatAsync(new XMLExporter());
                     }));
             }
@@ -63,7 +67,7 @@ namespace TaskThree.ViewModels
                 return _exportToExcelCommand ??
                     (_exportToExcelCommand = new RelayCommand(obj =>
                     {
-                        _dialog.FileName = "records.xlsx";
+                        _dialog.FileName = _defaultExcelName;
                         ExportToFormatAsync(new ExcelExporter());
                     }));
             }
@@ -71,6 +75,8 @@ namespace TaskThree.ViewModels
 
         private async void ExportToFormatAsync(IExporter exp)
         {
+            List<Record> records = new();
+
             if(!FilterRecord.IsValid())
             {
                 MessageBox.Show("Введены некорректные данные");
@@ -79,22 +85,24 @@ namespace TaskThree.ViewModels
 
             await Task.Run(() =>
             {
-                var records = _db.GetRecordsWithFilter(FilterRecord).ToList();
-                if (records.Count == 0)
-                {
-                    var result = MessageBox.Show("Записи не найдены, все равно создать документ?",
-                        "Подтверждение", MessageBoxButton.YesNo);
-
-                    if (result == MessageBoxResult.No)
-                    {
-                        return;
-                    }
-                }
-
-                string file = _dialog.SaveDialog();
-                if (!string.IsNullOrWhiteSpace(file))
-                    exp.Export(records, file);
+                records = _db.GetRecordsWithFilter(FilterRecord).ToList();
+           
             });
+
+            if (records.Count == 0)
+            {
+                var result = MessageBox.Show("Записи не найдены, все равно создать документ?",
+                    "Подтверждение", MessageBoxButton.YesNo);
+
+                if (result == MessageBoxResult.No)
+                {
+                    return;
+                }
+            }
+
+            string file = _dialog.SaveDialog();
+            if (!string.IsNullOrWhiteSpace(file))
+                await exp.ExportAsync(records, file);
         }
     }
 }

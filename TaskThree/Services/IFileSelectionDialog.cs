@@ -1,7 +1,7 @@
 ﻿
 namespace TaskThree.Services
 {
-    interface IDialogService
+    interface IFileSelectionDialog
     {
         string OpenDialog();
         string SaveDialog();

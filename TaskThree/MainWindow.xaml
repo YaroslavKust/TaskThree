@@ -7,13 +7,14 @@
         mc:Ignorable="d"
         Title="MainWindow" MinHeight="450" MinWidth="300" MaxHeight="550" MaxWidth="500">
     <Window.Resources>
-        <Style TargetType="Button">
+        <Style x:Key="ExportButton">
             <Setter Property="Control.Margin" Value="5"/>
-            <Setter Property="MinWidth" Value="100"/>
-            <Setter Property="MaxWidth" Value="300"/>
+            <Setter Property="Control.MinWidth" Value="100"/>
+            <Setter Property="Control.MaxWidth" Value="300"/>
         </Style>
         <Style TargetType="DatePicker">
             <Setter Property="Width" Value="200"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
         </Style>
         <Style TargetType="TextBox">
             <Style.Triggers>
@@ -30,13 +31,16 @@
             <RowDefinition Height="80*"/>
             <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
         <Menu Grid.Row="0">
-            <MenuItem Header="Загрузить csv" Grid.Row="0" Command="{Binding LoadDataCommand}"/>
+            <MenuItem Header="Загрузить csv" Command="{Binding LoadDataCommand}"/>
         </Menu>
         <GroupBox Header="Фильтр" Grid.Row="1">
             <StackPanel Orientation="Vertical">
                 <Label Content="Дата"/>
-                <DatePicker SelectedDate="{Binding FilterRecord.Date}" HorizontalAlignment="Left"/>
+                <DatePicker SelectedDate="{Binding FilterRecord.Date}"/>
                 <Label Content="Фамилия"/>
                 <TextBox Text="{Binding FilterRecord.LastName, ValidatesOnDataErrors=True}"/>
                 <Label Content="Имя"/>
@@ -51,8 +55,8 @@
         </GroupBox>
         <GroupBox Header="Экспорт" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
-                <Button Content="XML" Command="{Binding ExportToXMLCommand}"/>
-                <Button Content="Excel" Command="{Binding ExportToExcelCommand}"/>
+                <Button Content="XML" Command="{Binding ExportToXMLCommand}" Style="{StaticResource ExportButton}"/>
+                <Button Content="Excel" Command="{Binding ExportToExcelCommand}" Style="{StaticResource ExportButton}"/>
             </StackPanel>
         </GroupBox>
     </Grid>

@@ -2,7 +2,7 @@
 
 namespace TaskThree.Services
 {
-    class DefaultDialogService: IDialogService
+    class DefaultDialogService: IFileSelectionDialog
     {
         public string OpenDialog()
         {
