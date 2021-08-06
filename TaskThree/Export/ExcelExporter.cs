@@ -11,7 +11,6 @@ namespace TaskThree.Export
         public async Task ExportAsync(List<Record> records, string fileName) 
         {
             Excel.Application excel = new();
-            excel.DisplayAlerts = true;
             Excel.Workbook workbook = excel.Workbooks.Add(Missing.Value);
             Excel.Worksheet sheet = (Excel.Worksheet)workbook.Sheets[1];
             sheet.Columns.ColumnWidth = 20;

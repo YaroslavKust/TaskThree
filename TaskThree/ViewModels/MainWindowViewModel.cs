@@ -1,24 +1,25 @@
-﻿using TaskThree.Models;
+﻿using System.Collections.Generic;
+using System.IO;
 using System.Linq;
-using TaskThree.Export;
 using System.Threading.Tasks;
-using TaskThree.Services;
-using TaskThree.Repositories;
 using System.Windows;
-using System.Collections.Generic;
+using TaskThree.Export;
+using TaskThree.Models;
+using TaskThree.Repositories;
+using TaskThree.Services;
 
 namespace TaskThree.ViewModels
 {
     class MainWindowViewModel
     {
-        private const string _defaultExcelName = "records.xlsx";
-        private const string _defaultXMLName = "records.xml";
+        private const string DefaultExcelName = "records.xlsx";
+        private const string DefaultXmlName = "records.xml";
 
         private IRepository _db;
         private IFileService _file;
         private IFileSelectionDialog _dialog;
 
-        private RelayCommand _loadDataCommand, _exportToXMLCommand, _exportToExcelCommand;
+        private RelayCommand _loadDataCommand, _exportToXmlCommand, _exportToExcelCommand;
 
         public Record FilterRecord { get; set; } = new Record() { Date = System.DateTime.Today };
         
@@ -33,30 +34,37 @@ namespace TaskThree.ViewModels
         {
             get
             {
-                return _loadDataCommand ??
-                    (_loadDataCommand = new RelayCommand(async obj =>
-                    {
-                        string fname = _dialog.OpenDialog();
+                return _loadDataCommand ??= new RelayCommand(async _ =>
+                {
+                    string fileName = _dialog.OpenDialog();
 
-                        if (fname != null)
-                        {
-                            var results = await _file.ReadAllAsync(fname);
-                            _db.AddRecordsAsync(results);
-                        }
-                    }));
+                    if (fileName == null) return;
+
+                    try
+                    {
+                        var results = await _file.ReadAllAsync(fileName);
+                        await _db.AddRecordsAsync(results);
+                    }
+                    catch (InvalidDataException e)
+                    {
+                        MessageBox.Show(e.Message);
+                        return;
+                    }
+
+                    MessageBox.Show("Данные успешно записаны");
+                });
             }
         }
 
-        public RelayCommand ExportToXMLCommand
+        public RelayCommand ExportToXmlCommand
         {
             get
             {
-                return _exportToXMLCommand ??
-                    (_exportToXMLCommand = new RelayCommand(obj => 
-                    {
-                        _dialog.FileName = _defaultXMLName;
-                        ExportToFormatAsync(new XMLExporter());
-                    }));
+                return _exportToXmlCommand ??= new RelayCommand(_ => 
+                {
+                    _dialog.FileName = DefaultXmlName;
+                    ExportToFormatAsync(new XmlExporter());
+                });
             }
         }
 
@@ -64,12 +72,11 @@ namespace TaskThree.ViewModels
         {
             get
             {
-                return _exportToExcelCommand ??
-                    (_exportToExcelCommand = new RelayCommand(obj =>
-                    {
-                        _dialog.FileName = _defaultExcelName;
-                        ExportToFormatAsync(new ExcelExporter());
-                    }));
+                return _exportToExcelCommand ??= new RelayCommand(_ =>
+                {
+                    _dialog.FileName = DefaultExcelName;
+                    ExportToFormatAsync(new ExcelExporter());
+                });
             }
         }
 
@@ -86,7 +93,6 @@ namespace TaskThree.ViewModels
             await Task.Run(() =>
             {
                 records = _db.GetRecordsWithFilter(FilterRecord).ToList();
-           
             });
 
             if (records.Count == 0)

@@ -7,18 +7,36 @@ using TaskThree.Models;
 
 namespace TaskThree.Services
 {
-    class CSVFileService: IFileService
+    class CsvFileService: IFileService
     {
         public async Task<List<Record>> ReadAllAsync(string fileName)
         {
-            List<Record> records = new List<Record>();
-            StreamReader reader = new StreamReader(fileName, Encoding.UTF8);
+            var records = new List<Record>();
+            var reader = new StreamReader(fileName, Encoding.UTF8);
 
             string line;
             while ((line = await reader.ReadLineAsync()) != null)
             {
                 string[] data = line.Split(';');
-                Record rec = new Record()
+
+                if (!
+                    ((data.Length == 6)
+                    &&
+                    (DateTime.TryParse(data[0], out _))
+                    &&
+                    (Record.CheckNameFormat(data[1]))
+                    &&
+                    (Record.CheckNameFormat(data[2]))
+                    &&
+                    (Record.CheckNameFormat(data[3]))
+                    &&
+                    (Record.CheckPlaceFormat(data[4]))
+                    &&
+                    (Record.CheckPlaceFormat(data[5])))
+                )
+                    throw new InvalidDataException("Неверный формат данных");
+
+                Record rec = new()
                 {
                     Date = DateTime.Parse(data[0]),
                     FirstName = data[1],

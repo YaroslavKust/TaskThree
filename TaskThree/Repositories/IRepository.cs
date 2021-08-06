@@ -13,6 +13,6 @@ namespace TaskThree.Repositories
         /// This method compare records with filter object and return rigth records
         /// </summary>
         IEnumerable<Record> GetRecordsWithFilter(Record filterRec);
-        void AddRecordsAsync(IEnumerable<Record> records);
+        Task AddRecordsAsync(IEnumerable<Record> records);
     }
 }

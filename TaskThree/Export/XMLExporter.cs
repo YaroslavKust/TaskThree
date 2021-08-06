@@ -5,7 +5,7 @@ using TaskThree.Models;
 
 namespace TaskThree.Export
 {
-    class XMLExporter: IExporter
+    class XmlExporter: IExporter
     {
         public async Task ExportAsync(List<Record> records, string fileName) 
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using TaskThree.Models;
 
 namespace TaskThree.Repositories
@@ -16,7 +17,7 @@ namespace TaskThree.Repositories
 
         public IEnumerable<Record> GetRecordsWithFilter(Record rec)
         {
-            IEnumerable<Record> Records = _db.Records.Where(r =>
+            IEnumerable<Record> records = _db.Records.Where(r =>
                 (r.Date.DayOfYear == rec.Date.DayOfYear) && (r.Date.Year == rec.Date.Year)
                 &&
                 (String.IsNullOrWhiteSpace(rec.FirstName) || r.FirstName == rec.FirstName)
@@ -30,10 +31,10 @@ namespace TaskThree.Repositories
                 (String.IsNullOrWhiteSpace(rec.Country) || r.Country == rec.Country)
             );
 
-            return Records;
+            return records;
         }
 
-        public async void AddRecordsAsync(IEnumerable<Record> records)
+        public async Task AddRecordsAsync(IEnumerable<Record> records)
         {
             await _db.AddRangeAsync(records);
             await _db.SaveChangesAsync();

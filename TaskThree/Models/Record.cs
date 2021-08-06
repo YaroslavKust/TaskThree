@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace TaskThree.Models
 {
-    class Record: INotifyPropertyChanged, IDataErrorInfo
+    class Record : INotifyPropertyChanged, IDataErrorInfo
     {
         public int Id { get; set; }
         public DateTime Date { get; set; }
@@ -17,61 +17,41 @@ namespace TaskThree.Models
 
         private string _error = string.Empty;
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        public void OnPropertyChanged([CallerMemberName] string prop = "")
-        {
-            if (PropertyChanged != null)
-                PropertyChanged(this, new PropertyChangedEventArgs(prop));
-        }
-
         public string this[string propertyName]
         {
             get
             {
-                string cityOrCountry = "^[a - zA - Zа - яА - ЯЁё \\-]+$";
-                string fullName = "^[A-Za-zА-Яа-яЁё]+\\-?[A-Za-zА-Яа-яЁё]+$";
-
                 _error = string.Empty;
                 switch (propertyName)
                 {
                     case "FirstName":
                         if (FirstName != string.Empty)
-                            if (!CheckFormat(FirstName, fullName))
-                            {
+                            if (!CheckNameFormat(FirstName))
                                 _error = "Имя должно состоять из одного слова или двух, разделенных тире!";
-                            }
                         break;
 
                     case "LastName":
                         if (LastName != string.Empty)
-                            if (!CheckFormat(LastName, fullName))
-                            {
+                            if (!CheckNameFormat(LastName))
                                 _error = "Фамилия должна состоять из одного слова или двух, разделенных тире!";
-                            }
                         break;
 
                     case "SurName":
                         if (SurName != string.Empty)
-                            if (!CheckFormat(SurName, fullName))
-                            {
+                            if (!CheckNameFormat(SurName))
                                 _error = "Отчество должно состоять из одного слова или двух, разделенных тире!";
-                            }
                         break;
 
                     case "City":
                         if (City != string.Empty)
-                            if (!CheckFormat(City, cityOrCountry))
-                            {
+                            if (!CheckPlaceFormat(City))
                                 _error = "Название города не может содержать цифры и спецсимволы!";
-                            }
                         break;
 
                     case "Country":
                         if (Country != string.Empty)
-                            if (!CheckFormat(Country, cityOrCountry))
-                            {
+                            if (!CheckPlaceFormat(Country))
                                 _error = "Название страны не может содержать цифры и спецсимволы!";
-                            }
                         break;
                 }
 
@@ -79,20 +59,31 @@ namespace TaskThree.Models
             }
         }
 
-        public string Error
+        public string Error => null;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public void OnPropertyChanged([CallerMemberName] string prop = "")
         {
-            get
-            {
-                return null;
-            }
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
 
-        private bool CheckFormat(string s, string format)
+        public static bool CheckNameFormat(string s)
         {
-            Regex regex = new Regex(format);
-            return regex.IsMatch(s);
+            string fullNameFormat = "^[A-Za-zА-Яа-яЁё]+\\-?[A-Za-zА-Яа-яЁё]+$";
+            return new Regex(fullNameFormat).IsMatch(s);
         }
 
-        public bool IsValid() => _error == string.Empty;
+        public static bool CheckPlaceFormat(string s)
+        {
+            string cityOrCountryFormat = "^[a-zA-Zа-яА-ЯЁё \\-]+$";
+            return new Regex(cityOrCountryFormat).IsMatch(s);
+        }
+
+        public bool IsValid()
+        {
+            return _error == string.Empty;
+        }
+
     }
 }

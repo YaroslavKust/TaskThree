@@ -15,7 +15,7 @@ namespace TaskThree
         {
             var builder = new ContainerBuilder();
             builder.RegisterType<DefaultDialogService>().As<IFileSelectionDialog>();
-            builder.RegisterType<CSVFileService>().As<IFileService>();
+            builder.RegisterType<CsvFileService>().As<IFileService>();
             builder.RegisterType<RecordRepository>().As<IRepository>();
             builder.RegisterType<MainWindowViewModel>().AsSelf();
             var container = builder.Build();
