@@ -31,9 +31,6 @@
             <RowDefinition Height="80*"/>
             <RowDefinition Height="15*"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition/>
-        </Grid.ColumnDefinitions>
         <Menu Grid.Row="0">
             <MenuItem Header="Загрузить csv" Command="{Binding LoadDataCommand}"/>
         </Menu>
@@ -55,7 +52,7 @@
         </GroupBox>
         <GroupBox Header="Экспорт" Grid.Row="2">
             <StackPanel Orientation="Horizontal">
-                <Button Content="XML" Command="{Binding ExportToXMLCommand}" Style="{StaticResource ExportButton}"/>
+                <Button Content="XML" Command="{Binding ExportToXmlCommand}" Style="{StaticResource ExportButton}"/>
                 <Button Content="Excel" Command="{Binding ExportToExcelCommand}" Style="{StaticResource ExportButton}"/>
             </StackPanel>
         </GroupBox>

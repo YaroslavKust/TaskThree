@@ -20,19 +20,19 @@ namespace TaskThree.Services
                 string[] data = line.Split(';');
 
                 if (!
-                    ((data.Length == 6)
+                    (data.Length == 6
                     &&
-                    (DateTime.TryParse(data[0], out _))
+                    DateTime.TryParse(data[0], out _)
                     &&
-                    (Record.CheckNameFormat(data[1]))
+                    Record.CheckNameFormat(data[1])
                     &&
-                    (Record.CheckNameFormat(data[2]))
+                    Record.CheckNameFormat(data[2])
                     &&
-                    (Record.CheckNameFormat(data[3]))
+                    Record.CheckNameFormat(data[3])
                     &&
-                    (Record.CheckPlaceFormat(data[4]))
+                    Record.CheckPlaceFormat(data[4])
                     &&
-                    (Record.CheckPlaceFormat(data[5])))
+                    Record.CheckPlaceFormat(data[5]))
                 )
                     throw new InvalidDataException("Неверный формат данных");
 
