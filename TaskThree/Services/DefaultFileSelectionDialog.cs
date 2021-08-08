@@ -6,8 +6,7 @@ namespace TaskThree.Services
     {
         public string OpenDialog()
         {
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "csv files(*.csv)| *.csv";
+            OpenFileDialog dialog = new() {Filter = "csv files(*.csv)| *.csv"};
             if (dialog.ShowDialog() == true)
                 return dialog.FileName;
             return null;
@@ -15,8 +14,7 @@ namespace TaskThree.Services
 
         public string SaveDialog()
         {
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.FileName = FileName;
+            SaveFileDialog dialog = new(){FileName = FileName};
             if (dialog.ShowDialog() == true)
                 return dialog.FileName;
             return null;
