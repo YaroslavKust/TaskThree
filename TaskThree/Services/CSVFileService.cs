@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
+using System.Net.WebSockets;
 using System.Text;
 using System.Threading.Tasks;
 using TaskThree.Models;
@@ -14,13 +16,16 @@ namespace TaskThree.Services
             var records = new List<Record>();
             var reader = new StreamReader(fileName, Encoding.UTF8);
 
+            int propertyCount = typeof(Record).GetProperties().Count(p => p.CanWrite);
+
             string line;
+
             while ((line = await reader.ReadLineAsync()) != null)
             {
                 string[] data = line.Split(';');
 
                 if (!
-                    (data.Length == 6
+                    (data.Length == propertyCount - 1
                     &&
                     DateTime.TryParse(data[0], out _)
                     &&
