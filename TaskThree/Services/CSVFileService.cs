@@ -15,7 +15,7 @@ namespace TaskThree.Services
             var records = new List<Record>();
             var reader = new StreamReader(fileName, Encoding.UTF8);
 
-            int propertyCount = typeof(Record).GetProperties().Count(p => p.CanWrite);
+            int propertiesCount = typeof(Record).GetProperties().Count(p => p.CanWrite);
 
             string line;
 
@@ -24,7 +24,7 @@ namespace TaskThree.Services
                 string[] data = line.Split(';');
 
                 if (!
-                    (data.Length == propertyCount - 1
+                    (data.Length == propertiesCount - 1
                     &&
                     DateTime.TryParse(data[0], out _)
                     &&
